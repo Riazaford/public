@@ -1,0 +1,53 @@
+
+function hand_handler_assign(){
+
+    let upper_part = door_cont.getElementById("upper_part");
+    let upper_part_path = upper_part.getAttributeNS(null,"d");
+    console.log(upper_part_path);
+    let upper_part_pos = {
+        x: startingPoint(upper_part_path,468,658).x,
+        y: startingPoint(upper_part_path,468,658).y,
+        height : upper_part_path.split("V")[1],
+        width : upper_part_path.split("H")[1]
+    }
+    console.log(upper_part_pos);
+    console.log(startingPoint(upper_part_path,468,658));
+
+    let knock_pos = document.createElement("div")
+    knock_pos.style.position = 'absolute';
+    knock_pos.style.top = upper_part_pos.y + "px";
+    knock_pos.style.left = upper_part_pos.x + "px";
+    knock_pos.style.height = '30px';
+    knock_pos.style.width = '30px';
+    knock_pos.classList.add("door_knock");
+    door_container.appendChild(knock_pos);
+}
+
+//Ricavo il punto di inizio del percorso,
+//Utilizzo i comandi di disegno dell'svg come guida
+let commands = ["H","h","V","v","Q","q","C","c","S","s","L","l","T","t","A","a","Z","z"];
+
+function startingPoint(path,h,w){ //Ritorna un oggetto contenente X e Y del punto di partenza
+    let startX = path.search("M") + 1;
+    let stopX = path.search(" ");
+    let startY = stopX + 1;
+    let stopY = path.length;
+
+    commands.forEach( command => {
+        let command_pos = path.search(command);
+        if(command_pos < stopY && command_pos > 0){
+            stopY = path.search(command);
+        }
+    });
+    
+    if (startX && stopX && startY && stopY){
+        return { 
+            x : Number(path.slice(startX,stopX)),
+            y : Number(path.slice(startY,stopY))
+            }
+    }
+        
+}
+function height(path){ //Ritorna un float
+
+}
